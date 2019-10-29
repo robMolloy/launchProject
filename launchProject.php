@@ -30,17 +30,17 @@ function launchProject(){
     exec('sudo chown -R pi '.$projectName);
     exec('sudo chgrp -R pi '.$projectName);
     
-    replaceWordInAllFilesInDirectory($projectName,'oneThing',strtolower($projectName));
-    replaceWordInAllFilesInDirectory($projectName,'thing',strtolower($projectLabel));
-    replaceWordInAllFilesInDirectory($projectName,'Thing',ucfirst(strtolower($projectLabel)));
-    replaceWordInAllFilesInDirectory($projectName,'tng',strtolower($projectAcronym));
-    replaceWordInAllFilesInDirectory($projectName,'ont',strtolower($dbAcronym));
+    replaceWordInAllFilesInDirectory($projectName,'oneBug',$projectName);
+    replaceWordInAllFilesInDirectory($projectName,'issue',strtolower($projectLabel));
+    replaceWordInAllFilesInDirectory($projectName,'Issue',ucfirst(strtolower($projectLabel)));
+    replaceWordInAllFilesInDirectory($projectName,'isu',strtolower($projectAcronym));
+    replaceWordInAllFilesInDirectory($projectName,'onb',strtolower($dbAcronym));
     
-    renameAllFilenamesInFolder($projectName,'thing',$projectLabel);
-    renameAllFilenamesInFolder($projectName.'/img','thing',$projectLabel);
-    renameAllFilenamesInFolder($projectName.'/nav','thing',$projectLabel);
-    renameAllFilenamesInFolder($projectName.'/includes','thing',$projectLabel);
-    renameAllFilenamesInFolder($projectName.'/includes/classes','thing',$projectLabel);
+    renameAllFilenamesInFolder($projectName,'issue',$projectLabel);
+    renameAllFilenamesInFolder($projectName.'/img','issue',$projectLabel);
+    renameAllFilenamesInFolder($projectName.'/nav','issue',$projectLabel);
+    renameAllFilenamesInFolder($projectName.'/includes','issue',$projectLabel);
+    renameAllFilenamesInFolder($projectName.'/includes/classes','issue',$projectLabel);
 }
 
 function copy_directory($src,$new) {
@@ -170,6 +170,11 @@ switch($nav){
         }
         
         async function launchProject(){
+            let name = document.getElementById('projectNameInput').value;
+            let label = document.getElementById('projectNameLabel').value;
+            let acronym = document.getElementById('projectAcronymInput').value;
+            let dbacronym = document.getElementById('dbAcronymInput').value;
+            
             let launchButton = document.getElementById('launchButton');
             let validateButton = document.getElementById('validateButton');
             let panel = document.getElementById('launchNewProjectPanel');
@@ -183,7 +188,7 @@ switch($nav){
                 success = await ajax({'file':'launchProject.php?nav=launchProject','f':f});
             }
             if(success){
-                panel.innerHTML = 'Project created successfully. Realign database to complete.<textarea>' + newDbText() + '</textarea>';
+                panel.innerHTML = 'Project created successfully. Realign database to complete.<textarea>' + newDbText(name,label,acronym,dbacronym) + '</textarea>';
             } else {
                 panel.innerHTML = 'Attempted to create project. Check if complete.';
             };
@@ -301,10 +306,10 @@ switch($nav){
         <div class="wrapperMain" id="wrapperMain">
             <div class="panel" id="launchNewProjectPanel">
                 <h1>Launch New Project</h1>
-                <input type="text" name="projectName" placeholder="projectName" id="projectNameInput" onkeyup="validateProject();">
-                <input type="text" name="projectLabel" placeholder="projectLabel" id="projectNameLabel" onkeyup="validateProject();">
-                <input type="text" name="projectAcronym" placeholder="projectAcronym" id="projectAcronymInput" onkeyup="validateProject();">
-                <input type="text" name="dbAcronym" placeholder="dbAcronym" id="dbAcronymInput" onkeyup="validateProject();">
+                <input type="text" name="projectName" placeholder="projectName = oneBug" id="projectNameInput" onkeyup="validateProject();">
+                <input type="text" name="dbAcronym" placeholder="dbAcronym = onb" id="dbAcronymInput" onkeyup="validateProject();">
+                <input type="text" name="projectLabel" placeholder="projectLabel = issue" id="projectNameLabel" onkeyup="validateProject();">
+                <input type="text" name="projectAcronym" placeholder="projectAcronym = isu" id="projectAcronymInput" onkeyup="validateProject();">
                 <div class="buttonBar">
                     <button id="launchButton" onclick="launchProject();" style="display:none;">Launch Project</button>
                     <button id="validateButton" onclick="validateProject();" style="display:inline-block;">Valid Project?</button>
